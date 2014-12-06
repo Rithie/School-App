@@ -1,0 +1,54 @@
+doctype html
+html
+ head
+  title Student Summary
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  center
+   h1 Student Summary
+   p
+    div(class="upperdiv")
+     div 
+      h3 Name: #{name}
+     div
+      h3 Grade:
+       a(href="/grades/#{grade_id}") #{grade_name}
+    div(class="maindiv")
+     table(border="4")
+      tr
+       th Subject
+       th Max
+       th Score
+      each subject in subjects
+       tr
+        td
+         a(href="/subjects/#{subject.id}") #{subject.name}
+        td #{subject.maxScore}
+        td #{subject.score}
+      tr
+       td(colspan='3',bgcolor="maroon")
+      tr
+       td(colspan='3',bgcolor="silver")
+        h2 Edit Student Summary
+        form(action="/updateStudentSummary")      
+         input(type="hidden", name="id", value="#{id}")
+         p
+         |Name:   
+         input(type="text", name="new_name" ,class="textbox")
+         p
+         |Grade: 
+         select(name="new_grade" ,class="textbox")
+          option(value="0") Select
+           each grade in allGrades
+            option(value="#{grade.id}") #{grade.name}
+         p
+         |Subject: 
+         select(name="subject" ,class="textbox")
+          option(value="0") Select 
+           each sub in subjects
+            option(value="#{sub.id}") #{sub.name}
+         p
+         |Score:   
+         input(type="text", name="new_score" ,class="textbox")
+         p
+         input(type="submit", value="submit",class="button")

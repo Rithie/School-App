@@ -1,0 +1,33 @@
+doctype html
+html
+ head
+  title Grade Summary
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  center
+   h1 Grade Summary
+   div(class="maindiv")
+    table(border="2")
+     tr
+      td(class="tdleft")
+        h2 Students
+        p
+         each grade in grades
+          div
+           a(href="/grades/#{grade.id}") #{grade.name}
+           ul
+            each student in grade.students
+             li
+              a(href="/student/#{student.id}") #{student.name}
+      td(class="tdright")
+       form(action="/updateGrade")
+        h3 Edit Class here
+        hr
+        |Select Class  
+        select(name="prev_grade" ,class="textbox")
+         option(value="0") Select
+         each grade in grades
+          option(value="#{grade.id}") #{grade.name}
+        p
+        input(type="text", name="new_grade" ,class="textbox")
+        input(type="submit", value="submit" ,class="button")

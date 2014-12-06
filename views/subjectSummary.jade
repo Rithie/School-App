@@ -1,0 +1,22 @@
+doctype html
+html
+ head
+  title Subject Summary
+  link(type='text/css', rel='stylesheet', href='/stylesheets/style.css')
+ body
+  center
+   div(class='maindiv')
+    h1 Subject Summary
+    table(border='2px solid')
+     tr
+      th SubjectId
+      th Subject Name
+      th MaxScore
+      th Grade
+     each sub in allSubjects
+      tr
+       td #{sub.id}
+       td #{sub.name}
+       td #{sub.maxScore}
+       td
+        a(href="/grades/#{sub.grade}") #{sub.grade}
