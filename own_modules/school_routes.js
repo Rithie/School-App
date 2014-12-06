@@ -32,3 +32,21 @@ exports.get_student = function(req,res,next){
 			res.render('student',student);
 	});
 };
+
+exports.updateGrade = function(req,res,next){
+	school_records.update_Grade(req.query,function(err){
+		if(err)
+			next();
+		else
+			exports.get_students(req,res);
+	});
+};
+
+exports.updateStudentSummary = function(req,res,next){
+	school_records.updateStudentSummary(req.query,function(err){
+		if(err)
+			next();
+		else
+			exports.get_student(req,res,next);
+	});
+};

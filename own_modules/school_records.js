@@ -34,6 +34,10 @@ var _getStudentSummary = function(id, db,onComplete){
 	var subject_score_query = 'select su.name, su.id, su.maxScore, sc.score '+
 		'from subjects su, scores sc '+
 		'where su.id = sc.subject_id and sc.student_id ='+id;
+	var allGrades;
+	db.all('select * from grades',function(err,rows){
+				allGrades = rows;
+	});
 	db.get(student_grade_query,function(est,student){
 		if(!student){
 			onComplete(null,null);
@@ -41,6 +45,7 @@ var _getStudentSummary = function(id, db,onComplete){
 		}
 		db.all(subject_score_query,function(esc,subjects){			
 			student.subjects = subjects;
+			student.allGrades = allGrades;
 			onComplete(null,student);
 		})
 	});
@@ -52,12 +57,27 @@ var _getSubjectSummary = function(db,onComplete){
 	db.all(subjectSummaryQuery,onComplete);
 }
 
-var init = function(location){	
+var _updateGrade = function(data,db,onComplete){
+		var updateQuery = "update grades set name='"+data.new_grade+"' where id ="+data.prev_grade;
+		db.run(updateQuery,onComplete(null,true));
+};
+
+var _updateStudentSummary = function(data,db,onComplete){
+	var studentUpdateQuery = "update students set name='"+data.new_name+
+						"',grade_id="+data.new_grade+" where id="+data.id;
+	var scoreUpdateQuery = "update scores set score="+data.new_score+
+						" where student_id="+data.id+" and subject_id="+data.subject;
+	db.run(studentUpdateQuery,function(err){
+		if(!err)
+			db.run(scoreUpdateQuery,onComplete(null,true));				
+	});				
+};
+
+var init = function(location){
 	var operate = function(operation){
 		return function(){
 			var onComplete = (arguments.length == 2)?arguments[1]:arguments[0];
 			var arg = (arguments.length == 2) && arguments[0];
-
 			var onDBOpen = function(err){
 				if(err){onComplete(err);return;}
 				db.run("PRAGMA foreign_keys = 'ON';");
@@ -74,7 +94,9 @@ var init = function(location){
 		getStudentsByGrade: operate(_getStudentsByGrade),
 		getSubjectsByGrade: operate(_getSubjectsByGrade),
 		getStudentSummary: operate(_getStudentSummary),
-		getSubjectSummary: operate(_getSubjectSummary)
+		getSubjectSummary: operate(_getSubjectSummary),
+		update_Grade:operate(_updateGrade),
+		updateStudentSummary:operate(_updateStudentSummary)
 	};
 
 	return records;
