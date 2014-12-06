@@ -24,6 +24,8 @@ app.get('/students',school_routes.get_students);
 app.get('/subjects',school_routes.get_subjects);
 app.get('/subjectSummary',school_routes.get_subjectSummary);
 app.get('/student/:id',school_routes.get_student);
+app.get('/updateGrade',school_routes.updateGrade);
+app.get('/updateStudentSummary',school_routes.updateStudentSummary);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
