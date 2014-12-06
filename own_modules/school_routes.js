@@ -46,7 +46,20 @@ exports.updateStudentSummary = function(req,res,next){
 	school_records.updateStudentSummary(req.query,function(err){
 		if(err)
 			next();
+		else{
+			school_records.getStudentSummary(req.query.id,
+				function(err,student){
+				 res.render('student',student);
+			});
+		}
+	});
+};
+
+exports.updateSubjectSummary = function(req,res,next){
+	school_records.updateSubjectSummary(req.query,function(err){
+		if(err)
+			next();
 		else
-			exports.get_student(req,res,next);
+			exports.get_subjectSummary(req,res);
 	});
 };

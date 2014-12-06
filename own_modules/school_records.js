@@ -69,8 +69,17 @@ var _updateStudentSummary = function(data,db,onComplete){
 						" where student_id="+data.id+" and subject_id="+data.subject;
 	db.run(studentUpdateQuery,function(err){
 		if(!err)
-			db.run(scoreUpdateQuery,onComplete(null,true));				
+			db.run(scoreUpdateQuery,onComplete(null,true));	
 	});				
+};
+
+var _updateSubjectSummary = function(data,db,onComplete){		
+	var subjectUpdateQuery = "update subjects set name='"+data.new_name+"',maxScore="+
+					data.new_score+",grade_id="+data.new_grade+" where id="+data.subject_id;
+	db.run(subjectUpdateQuery,function(err){
+		if(!err)
+			onComplete(null,true);	
+	});	
 };
 
 var init = function(location){
@@ -96,7 +105,8 @@ var init = function(location){
 		getStudentSummary: operate(_getStudentSummary),
 		getSubjectSummary: operate(_getSubjectSummary),
 		update_Grade:operate(_updateGrade),
-		updateStudentSummary:operate(_updateStudentSummary)
+		updateStudentSummary:operate(_updateStudentSummary),
+		updateSubjectSummary:operate(_updateSubjectSummary)
 	};
 
 	return records;
