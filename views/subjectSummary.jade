@@ -20,3 +20,40 @@ html
        td #{sub.maxScore}
        td
         a(href="/grades/#{sub.grade}") #{sub.grade}
+    p
+    form(action="/updateSubjectSummary")
+     table(border='0px',bgcolor="lightpink")
+      tr
+       td(colspan="2")
+        h2 Edit Subject Summary
+      tr
+       td(class="tdlt")
+        |Select Subject:
+       td(class="tdrt")
+        select(name="subject_id" ,class="textbox")
+          option(value="0") Select
+          each sub in allSubjects
+           option(value="#{sub.id}") #{sub.name}
+       tr
+       td(class="tdlt")
+        |New Grade:
+       td(class="tdrt")
+        select(name="new_grade" ,class="textbox")
+         option(value="0") Select
+         option(value="1") class1
+         option(value="2") class2
+      tr
+       td(class="tdlt")
+        |New Subject Name:
+       td(class="tdrt")
+        input(type="text", name="new_name" ,class="textbox")
+      tr
+       td(class="tdlt")
+        |New MaxScore:
+       td(class="tdrt")
+        input(type="text", name="new_score" ,class="textbox")
+      tr
+       td
+       td(class="tdrt")
+        input(type="submit", value="submit")
+        p
