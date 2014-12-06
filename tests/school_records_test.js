@@ -90,16 +90,27 @@ describe('school_records',function(){
 
 	describe('#update grade,student_name,score from StudentSummary',function(){
 		it('true if updation of grade,student_name,score is successful',function(done){
-			var param = {id:2,new_name:"Ramu",new_grade:1,subject:1,new_score:88};
+			var param = { id: '2',new_name: 'Ramu',new_grade: '1',subject: '1',new_score: '88' };
 			school_records.updateStudentSummary(param,function(err,result){
 				assert.notOk(err);
 				assert.ok(result);
 				done();
 			})
 		})
-		// it("after updation student name='Ram' and grade_id=1 whose id=2",function(done){
-		// 	school_records.getStudentsByGrade(function(err,students){
-		// 		assert.deepEqual(students[0].students[1],{id:2,name:'Ram',grade_id:1});
+	})
+
+	describe('#update subject name,maxScore and grade from SubjectSummary',function(){
+		it('true if updation of subject name,maxScore and grade is successful',function(done){
+			var param = {subject_id:'4',new_grade:'2',new_name:'KungFu',new_score:'100'};
+			school_records.updateSubjectSummary(param,function(err,result){
+				assert.notOk(err);
+				assert.ok(result);
+				done();
+			})
+		})
+		// it("after updation new_name='KungFu' on id=4",function(done){
+		// 	school_records.getSubjectSummary(function(err,subjectSummary){
+		// 		console.log(subjectSummary);
 		// 		done();
 		// 	})
 		// })
