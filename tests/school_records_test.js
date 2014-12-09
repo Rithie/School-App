@@ -161,4 +161,27 @@ describe('school_records',function(){
 			})
 		})
 	})
+
+	describe('#get student name by grade',function(){
+		it("classSummary returns list of all students in given grade",function(done){
+			var students_record = [{ stu_id: 1,stu_name:'Vishnu',grade_id:1,grade:'class1'},
+  								{stu_id:2,stu_name:'Mahesh',grade_id:1,grade:'class1'},
+  								{stu_id:3,stu_name:'Parmatma',grade_id:1,grade:'class1'}];
+			school_records.classSummary(1,function(err,stu_data){
+				assert.notOk(err);
+				assert.deepEqual(students_record,stu_data[1]);
+				done();
+			})
+		})
+		it("classSummary returns list of all subjects in given grade",function(done){
+			var subject_record = [{ sub_id: 1, subject: 'Cricket', maxScore: 100 },
+  									{ sub_id: 2, subject: 'Hockey', maxScore: 50 },
+  									{ sub_id: 3, subject: 'KhoKho', maxScore: 25 }];
+  			school_records.classSummary(1,function(err,subject_data){
+				assert.notOk(err);
+				assert.deepEqual(subject_record,subject_data[0]);
+				done();
+			})
+		})
+	})
 })
