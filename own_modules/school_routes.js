@@ -63,3 +63,53 @@ exports.updateSubjectSummary = function(req,res,next){
 			exports.get_subjectSummary(req,res);
 	});
 };
+
+exports.addStudent = function(req,res,next){
+	school_records.addStudent(req.query,function(err){
+		if(err)
+			next();
+		else
+			exports.get_students(req,res);
+	})
+};
+
+exports.addSubject = function(req,res,next){
+	school_records.addSubject(req.query,function(err){
+		if(err)
+			next();
+		else
+			exports.get_students(req,res);
+	})
+};
+
+exports.subjectSummaryBySubjectName = function(req,res,next){
+	school_records.subjectSummaryBySubjectName(req.params.id,function(err,scoreData){
+		console.log(scoreData);
+		if(!scoreData)
+			next();
+		else
+			res.render('subjectSummaryBySubjectName',{scoreData:scoreData});
+	})
+};
+
+exports.addScore = function(req,res,next){
+	school_records.addScore(req.query,function(err){
+		if(err)
+			next();
+		else{
+			school_records.subjectSummaryBySubjectName(req.query.subject,function(err,scoreData){
+				res.render('subjectSummaryBySubjectName',{scoreData:scoreData});
+			});
+		}
+	});
+};
+
+exports.classSummary = function(req,res,next){
+	school_records.classSummary(req.params.class_id,function(err,classData){
+		console.log(classData);
+		if(!classData)
+			next();
+		else
+			res.render('classSummary',{classData:classData});
+	});
+};

@@ -8,7 +8,6 @@ var _getGrades = function(db,onComplete){
 var _getStudentsByGrade = function(db,onComplete){
 	_getGrades(db,function(err,grades){		
 		db.all('select * from students', function(err1,students){
-			
 			grades.forEach(function(g){
 				g.students = students.filter(function(s){return s.grade_id==g.id});
 			})			
@@ -59,7 +58,10 @@ var _getSubjectSummary = function(db,onComplete){
 
 var _updateGrade = function(data,db,onComplete){
 		var updateQuery = "update grades set name='"+data.new_grade+"' where id ="+data.prev_grade;
-		db.run(updateQuery,onComplete(null,true));
+		db.run(updateQuery,function(err){
+			if(!err)
+				onComplete(null,true);
+		});
 };
 
 var _updateStudentSummary = function(data,db,onComplete){
@@ -76,10 +78,79 @@ var _updateStudentSummary = function(data,db,onComplete){
 var _updateSubjectSummary = function(data,db,onComplete){		
 	var subjectUpdateQuery = "update subjects set name='"+data.new_name+"',maxScore="+
 					data.new_score+",grade_id="+data.new_grade+" where id="+data.subject_id;
+	var deleteScoreQuery = "delete from scores where subject_id="+data.subject_id;
 	db.run(subjectUpdateQuery,function(err){
+		if(!err){
+			db.run(deleteScoreQuery,function(err){
+				onComplete(null,true);
+			})
+		}
+				
+	});	
+};
+
+var _addStudent = function(data,db,onComplete){
+	var addStudentQuery = "insert into students (name,grade_id) values('"+
+						data.stu_name+"',"+data.grade+")";
+	db.run(addStudentQuery,function(err){
 		if(!err)
 			onComplete(null,true);	
 	});	
+
+};
+
+var _addSubject = function(data,db,onComplete){
+	var addSubjectQuery = "insert into subjects (name,maxScore,grade_id) values('"+
+					data.sub_name+"',"+data.maxScore+","+data.grade+")";
+	db.run(addSubjectQuery,function(err){
+		if(!err)
+			onComplete(null,true);	
+	});	
+};
+
+var _subjectSummaryBySubjectName = function(id,db,onComplete){
+	var getScoreQuery = "select stu.id,stu.name,sco.score,stu.grade_id from students stu inner join scores sco on stu.id = sco.student_id and sco.subject_id="+id;
+	var getGrade = "select name as grade from  grades where id=";
+	var subject;
+	db.all("select id as sub_id,name as subject from subjects where id="+id,function(err,sub_name){
+		subject = sub_name;
+	})
+	db.all(getScoreQuery,function(err,scoreData){
+		if(!err){
+			db.all(getGrade+scoreData[0].grade_id,function(err2,gradeData){
+				gradeData.push(scoreData);
+				gradeData.unshift(subject[0]);
+				onComplete(null,gradeData);
+			})
+		}
+
+	});
+};
+
+var _addScore = function(data,db,onComplete){
+	var addScoreQuery = "insert into scores(student_id,subject_id,score) values($student_id,$subject_id,$score)";
+	var param = {$student_id:data.student,$subject_id:data.subject,$score:data.score};
+	db.run(addScoreQuery,param,function(err){
+		if(!err)
+			onComplete(null,true);
+	});
+};
+
+var _classSummary = function(grade_id,db,onComplete){
+	var classSummaryQuery = "select stu.id as stu_id,stu.name as stu_name,stu.grade_id,"+
+							"grade.name as grade from students stu inner join grades grade on"+
+							" stu.grade_id=grade.id where stu.grade_id="+grade_id;
+	var getSubjectsQuery = "select id as sub_id,name as subject,maxScore from subjects"+
+							" where grade_id="+grade_id;
+	var result = [];
+	db.all(classSummaryQuery,function(err,classData){
+		if(!err)
+			db.all(getSubjectsQuery,function(err,subjects){
+				result.push(subjects);
+				result.push(classData);
+				onComplete(null,result);
+			});
+	});
 };
 
 var init = function(location){
@@ -106,7 +177,12 @@ var init = function(location){
 		getSubjectSummary: operate(_getSubjectSummary),
 		update_Grade:operate(_updateGrade),
 		updateStudentSummary:operate(_updateStudentSummary),
-		updateSubjectSummary:operate(_updateSubjectSummary)
+		updateSubjectSummary:operate(_updateSubjectSummary),
+		addStudent:operate(_addStudent),
+		addSubject:operate(_addSubject),
+		subjectSummaryBySubjectName:operate(_subjectSummaryBySubjectName),
+		addScore:operate(_addScore),
+		classSummary:operate(_classSummary)
 	};
 
 	return records;
