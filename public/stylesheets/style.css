@@ -1,0 +1,52 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: blue;
+}
+table{
+	width: 100%;
+}
+.maindiv{
+	width:40%;
+	text-align: center;
+}
+.upperdiv{
+	width:40%;
+	text-align: left;
+}
+.tdleft{
+	padding: 5px;
+	text-align: left;
+	background: lightpink;
+}
+.tdright{
+	padding: 5px;
+	text-align: center;
+	background: lightpink;
+}
+.textbox{
+	height: 20px;
+}
+.textbox:focus{
+	background: lightblue;
+}
+.button{
+	height: 25px;
+	width: 70px;
+}
+.button:hover{
+	background: black;
+	color: white;
+	font-weight: bold;
+}
+.tdlt{
+	width: 40%;
+	text-align: right;
+}
+.tdrt{
+	width: 60%;
+	text-align: left;
+}
