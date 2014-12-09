@@ -38,7 +38,7 @@ exports.updateGrade = function(req,res,next){
 		if(err)
 			next();
 		else
-			exports.get_students(req,res);
+			res.redirect('/students');
 	});
 };
 
@@ -47,10 +47,7 @@ exports.updateStudentSummary = function(req,res,next){
 		if(err)
 			next();
 		else{
-			school_records.getStudentSummary(req.query.id,
-				function(err,student){
-				 res.render('student',student);
-			});
+			res.redirect('/student/'+req.query.id);
 		}
 	});
 };
@@ -60,7 +57,7 @@ exports.updateSubjectSummary = function(req,res,next){
 		if(err)
 			next();
 		else
-			exports.get_subjectSummary(req,res);
+			res.redirect('/subjectSummary');
 	});
 };
 
@@ -69,7 +66,7 @@ exports.addStudent = function(req,res,next){
 		if(err)
 			next();
 		else
-			exports.get_students(req,res);
+			res.redirect('/students');
 	})
 };
 
@@ -78,13 +75,12 @@ exports.addSubject = function(req,res,next){
 		if(err)
 			next();
 		else
-			exports.get_students(req,res);
+			res.redirect('/students');
 	})
 };
 
 exports.subjectSummaryBySubjectName = function(req,res,next){
 	school_records.subjectSummaryBySubjectName(req.params.id,function(err,scoreData){
-		console.log(scoreData);
 		if(!scoreData)
 			next();
 		else
@@ -93,20 +89,17 @@ exports.subjectSummaryBySubjectName = function(req,res,next){
 };
 
 exports.addScore = function(req,res,next){
-	school_records.addScore(req.query,function(err){
+	school_records.addScore(req.query,function(err){console.log(req.query);
 		if(err)
 			next();
 		else{
-			school_records.subjectSummaryBySubjectName(req.query.subject,function(err,scoreData){
-				res.render('subjectSummaryBySubjectName',{scoreData:scoreData});
-			});
+			 res.redirect("/subjectSummaryBySubjectName/"+req.query.subject);
 		}
 	});
 };
 
 exports.classSummary = function(req,res,next){
 	school_records.classSummary(req.params.class_id,function(err,classData){
-		console.log(classData);
 		if(!classData)
 			next();
 		else
