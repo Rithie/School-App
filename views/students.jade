@@ -51,10 +51,19 @@ html
          hr(color='darkgreen')
       tr
        td
-        form(action="/addGrade")
-         h2 Add Grade
-         |Grade Name   : 
-         input(type="text", name="grade_name" ,class="textbox")
+        form(action="/addSubject")
+         h2 Add Subject 
+         |Subject Name   : 
+         input(type="text", name="sub_name" ,class="textbox")
+         p
+         |Max Score      : 
+         input(type="text", name="maxScore" ,class="textbox")
+         p
+         |Select Class   :
+         select(name="grade" ,class="textbox")
+          option(value="0") Select
+          each grade in grades
+           option(value="#{grade.id}") #{grade.name}
          p
          input(type="submit", value="Add" ,class="button")
          p

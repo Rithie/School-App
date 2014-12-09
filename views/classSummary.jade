@@ -1,0 +1,24 @@
+doctype html
+html
+ head
+  title Grade Info
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  center
+   h1 Grade Information
+   h3 Grade : #{classData[1][0].grade}
+   p
+    div(class="upperdiv")
+     table(width='20%',border="1px",bgcolor='lightyellow')
+      tr
+       td
+        h2 Student List
+        ul
+         each student in classData[1]
+          li #{student.stu_name}
+      tr
+       td
+        h2 Subject List
+        ul
+         each subject in classData[0]
+          li #{subject.subject} > #{subject.maxScore}

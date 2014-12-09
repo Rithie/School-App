@@ -1,0 +1,38 @@
+doctype html
+html
+ head
+  title Subject Summary by Subject Name
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  center
+   h1 Subject Summary by Subject Name
+   i
+    h3 Subject: #{scoreData[0].subject}
+    h3 Grade  : #{scoreData[1].grade}
+   div(class='maindiv')
+    table(bgcolor='lightgreen')
+      each score in scoreData[2]
+       tr
+        td(style='color:brown') #{score.name} : #{score.score}
+    p
+    form(action='/addScore')
+     table(bgcolor='lightpink')
+      tr
+       td
+        h2 Add Score
+      tr
+       td
+        |Select Student:
+        select(name='student',class='textbox')
+         option(value='0') Select
+         each score in scoreData[2]
+          option(value='#{score.id}') #{score.name}
+      tr
+       td
+        |Score:
+        input(type='text',name='score',class='textbox')
+        input(type='hidden',name='subject',value='#{scoreData[0].sub_id}')
+      tr
+       td
+        input(type='submit',value='submit')
+        p
