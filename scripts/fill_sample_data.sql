@@ -1,4 +1,10 @@
 pragma foreign_keys = 'ON';
+
+create table grades(id int, name text);
+create table students(id int, name text, grade_id int);
+create table subjects(id int, name text, maxScore int,grade_id int);
+create table scores(student_id int, subject_id int, score int);
+
 insert into grades (id,name) 
 	values (1,'class 1'), (2,'class 2');
 insert into students (id,name,grade_id)
